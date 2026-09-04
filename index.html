@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Previsão do Tempo - BrasilAPI</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>🌤️ Previsão do Tempo</h1>
+    <p>Digite o nome de uma cidade e pressione Enter</p>
+  </header>
+
+  <main>
+    <!-- Campo de busca -->
+    <section class="busca">
+      <input
+        type="text"
+        id="inputCidade"
+        placeholder="Ex: Jacareí"
+        autocomplete="off"
+      />
+    </section>
+
+    <!-- Mensagem de status (Buscando... / erro) -->
+    <p id="mensagemStatus"></p>
+
+    <!-- Lista de cidades encontradas -->
+    <section id="listaCidades" class="lista-cidades"></section>
+
+    <!-- Resultado da previsão do tempo -->
+    <section id="resultadoPrevisao" class="previsao"></section>
+  </main>
+
+  <footer>
+    <p>Dados fornecidos pela <a href="https://brasilapi.com.br" target="_blank">BrasilAPI</a></p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
