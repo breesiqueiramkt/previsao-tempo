@@ -1,21 +1,26 @@
 // Pegando os elementos da página
+const formBusca = document.getElementById("formBusca");
 const inputCidade = document.getElementById("inputCidade");
 const mensagemStatus = document.getElementById("mensagemStatus");
 const listaCidades = document.getElementById("listaCidades");
 const resultadoPrevisao = document.getElementById("resultadoPrevisao");
 
-// Quando o usuário pressionar Enter no campo de busca, inicia a pesquisa
-inputCidade.addEventListener("keydown", (evento) => {
-  if (evento.key === "Enter") {
-    const nomeCidade = inputCidade.value.trim();
+// Quando o usuário toca no botão de busca OU pressiona Enter/"Buscar" no
+// teclado do celular, o formulário dispara o evento "submit"
+formBusca.addEventListener("submit", (evento) => {
+  evento.preventDefault();
 
-    if (nomeCidade === "") {
-      mostrarErro("Digite o nome de uma cidade.");
-      return;
-    }
+  const nomeCidade = inputCidade.value.trim();
 
-    buscarCidades(nomeCidade);
+  if (nomeCidade === "") {
+    mostrarErro("Digite o nome de uma cidade.");
+    return;
   }
+
+  // Fecha o teclado virtual no celular após a busca
+  inputCidade.blur();
+
+  buscarCidades(nomeCidade);
 });
 
 // Etapa 1: buscar cidades pelo nome digitado
@@ -55,7 +60,7 @@ function exibirCidades(cidades) {
     item.className = "cidade-item";
     item.textContent = `${cidade.nome} - ${cidade.estado}`;
 
-    // Ao clicar na cidade, busca a previsão do tempo dela
+    // Ao tocar/clicar na cidade, busca a previsão do tempo dela
     item.addEventListener("click", () => {
       buscarPrevisao(cidade.id);
     });
@@ -107,8 +112,8 @@ function exibirPrevisao(previsao) {
 
     linha.innerHTML = `
       <span class="data">${dia.data}</span>
-      <span class="condicao">${dia.condicao_desc}</span>
       <span class="temperaturas">${dia.min}°C / ${dia.max}°C</span>
+      <span class="condicao">${dia.condicao_desc}</span>
       <span class="uv">UV: ${dia.indice_uv}</span>
     `;
 
@@ -116,6 +121,9 @@ function exibirPrevisao(previsao) {
   });
 
   resultadoPrevisao.appendChild(container);
+
+  // Rola a tela até o resultado, útil quando o teclado do celular ocupava a tela
+  resultadoPrevisao.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 // Funções auxiliares para mensagens de status
@@ -132,4 +140,15 @@ function mostrarErro(texto) {
 function limparStatus() {
   mensagemStatus.textContent = "";
   mensagemStatus.classList.remove("erro");
+}
+
+// Registra o Service Worker: permite abrir o app rapidamente pela tela
+// inicial do celular (PWA), mesmo com conexão instável
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {
+      // Se falhar (ex: rodando localmente sem servidor), o site continua
+      // funcionando normalmente, só sem o recurso de instalar como app
+    });
+  });
 }

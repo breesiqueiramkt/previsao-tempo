@@ -2,6 +2,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  /* Evita que o texto "encolha" sozinho ao girar o celular */
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -20,11 +26,16 @@ header {
   color: #fff;
   text-align: center;
   padding: 24px 16px;
+  padding-top: max(24px, env(safe-area-inset-top));
 }
 
 header h1 {
-  font-size: 1.8rem;
+  font-size: clamp(1.4rem, 5vw, 1.8rem);
   margin-bottom: 6px;
+}
+
+header p {
+  font-size: 0.95rem;
 }
 
 main {
@@ -38,13 +49,16 @@ main {
 
 .busca {
   display: flex;
-  justify-content: center;
+  gap: 8px;
 }
 
 #inputCidade {
+  flex: 1;
+  min-width: 0;
   width: 100%;
   padding: 12px 14px;
-  font-size: 1rem;
+  /* 16px é o mínimo para o iOS não dar zoom automático ao focar o campo */
+  font-size: 16px;
   border: 2px solid #cbd5e0;
   border-radius: 8px;
   outline: none;
@@ -52,6 +66,23 @@ main {
 
 #inputCidade:focus {
   border-color: #2b6cb0;
+}
+
+#botaoBuscar {
+  flex-shrink: 0;
+  min-width: 48px;
+  min-height: 48px;
+  font-size: 1.1rem;
+  background-color: #2b6cb0;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+#botaoBuscar:active {
+  background-color: #21568c;
 }
 
 #mensagemStatus {
@@ -75,14 +106,23 @@ main {
   background-color: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  padding: 12px 14px;
+  padding: 14px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
   cursor: pointer;
+  touch-action: manipulation;
   transition: background-color 0.15s ease;
 }
 
-.cidade-item:hover {
+.cidade-item:hover,
+.cidade-item:active {
   background-color: #ebf4ff;
   border-color: #2b6cb0;
+}
+
+.previsao:empty {
+  display: none;
 }
 
 .previsao {
@@ -95,6 +135,7 @@ main {
 .previsao h2 {
   color: #2b6cb0;
   margin-bottom: 4px;
+  font-size: 1.2rem;
 }
 
 .previsao .atualizado {
@@ -103,11 +144,15 @@ main {
   margin-bottom: 12px;
 }
 
+/* Cada dia em grid 2x2: no celular não estoura mais a linha nem fica
+   apertado como acontecia com o layout em linha única */
 .dia-previsao {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  row-gap: 4px;
+  column-gap: 8px;
+  padding: 12px 0;
   border-bottom: 1px solid #edf2f7;
 }
 
@@ -116,24 +161,29 @@ main {
 }
 
 .dia-previsao .data {
+  grid-column: 1;
+  grid-row: 1;
   font-weight: bold;
-  min-width: 90px;
-}
-
-.dia-previsao .condicao {
-  flex: 1;
-  text-align: center;
-  color: #4a5568;
 }
 
 .dia-previsao .temperaturas {
-  min-width: 90px;
+  grid-column: 2;
+  grid-row: 1;
   text-align: right;
   color: #2d3748;
+  font-weight: bold;
+}
+
+.dia-previsao .condicao {
+  grid-column: 1;
+  grid-row: 2;
+  text-align: left;
+  color: #4a5568;
 }
 
 .dia-previsao .uv {
-  min-width: 60px;
+  grid-column: 2;
+  grid-row: 2;
   text-align: right;
   font-size: 0.85rem;
   color: #718096;
@@ -142,6 +192,7 @@ main {
 footer {
   margin-top: auto;
   padding: 16px;
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
   text-align: center;
   font-size: 0.85rem;
   color: #718096;

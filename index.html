@@ -2,27 +2,41 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Previsão do Tempo - BrasilAPI</title>
+
+  <!-- PWA: permite abrir como um "app" direto da tela inicial do celular -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#2b6cb0" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Previsão do Tempo" />
+
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
   <header>
     <h1>🌤️ Previsão do Tempo</h1>
-    <p>Digite o nome de uma cidade e pressione Enter</p>
+    <p>Digite o nome de uma cidade e toque em buscar</p>
   </header>
 
   <main>
     <!-- Campo de busca -->
-    <section class="busca">
+    <form id="formBusca" class="busca" autocomplete="off">
       <input
-        type="text"
+        type="search"
         id="inputCidade"
         placeholder="Ex: Jacareí"
         autocomplete="off"
+        inputmode="search"
+        enterkeyhint="search"
       />
-    </section>
+      <button type="submit" id="botaoBuscar" aria-label="Buscar cidade">
+        🔍
+      </button>
+    </form>
 
     <!-- Mensagem de status (Buscando... / erro) -->
     <p id="mensagemStatus"></p>
@@ -35,7 +49,7 @@
   </main>
 
   <footer>
-    <p>Dados fornecidos pela <a href="https://brasilapi.com.br" target="_blank">BrasilAPI</a></p>
+    <p>Dados fornecidos pela <a href="https://brasilapi.com.br" target="_blank" rel="noopener">BrasilAPI</a></p>
   </footer>
 
   <script src="js/script.js"></script>
